@@ -6,73 +6,128 @@
 <title>애니멀 브롤 통계</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
-:root{--bg:#f2f4f6;--card:#fff;--ink:#191f28;--ink2:#4e5968;--ink3:#8b95a1;--line:#eef0f2;--blue:#3182f6;--blueSoft:#e8f3ff;--red:#f04452;--green:#16a34a;--bar:#d6e6fd}
-@media (prefers-color-scheme:dark){:root{--bg:#101216;--card:#1b1e24;--ink:#f2f4f6;--ink2:#b0b8c1;--ink3:#6b7684;--line:#2a2e36;--blueSoft:#18314f;--bar:#1f3b61}}
+:root{
+  --bg:#f3f5f8;--surface:#fff;--ink:#121b27;--ink2:#4a5666;--ink3:#8592a3;--line:#e5e9ef;--soft:#f6f8fb;
+  --brand:#2457e6;--brandSoft:#e8eefd;--good:#0e9f77;--goodSoft:#dcf4ec;--bad:#e0444b;--badSoft:#fde6e7;--mid:#c3ccd8;
+  --t-n:#8592a3;--t-r:#2f7de1;--t-e:#8b5cf6;--t-m:#e0489a;--t-l:#e09a00;--t-t:#0e9f77;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0c1118;--surface:#141b25;--ink:#edf1f7;--ink2:#aab5c4;--ink3:#6b7889;--line:#232e3d;--soft:#1a2330;
+  --brand:#7aa5ff;--brandSoft:#1b2a4a;--good:#3ccf9f;--goodSoft:#12372e;--bad:#ff7a80;--badSoft:#3d1c20;--mid:#3a4658;
+}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard',-apple-system,system-ui,sans-serif;-webkit-text-size-adjust:100%}
-.wrap{max-width:880px;margin:0 auto;padding:0 16px 80px}
-header{padding:22px 0 10px}
-h1{margin:0;font-size:22px;font-weight:800;letter-spacing:-.03em}
-.sub{font-size:13px;color:var(--ink3);margin-top:4px;font-weight:500}
-.card{background:var(--card);border-radius:20px;padding:16px;margin-top:12px}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-select,input[type=number]{height:36px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:0 10px;font:600 13px 'Pretendard',sans-serif}
-label{font-size:13px;color:var(--ink2);font-weight:600;display:flex;gap:6px;align-items:center}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 0 2px;position:sticky;top:0;background:var(--bg);z-index:5}
-.tab{border:0;background:var(--card);color:var(--ink2);border-radius:99px;padding:9px 16px;font:700 14px 'Pretendard',sans-serif;white-space:nowrap;cursor:pointer}
-.tab.on{background:var(--blue);color:#fff}
-.btn{border:0;background:var(--blue);color:#fff;border-radius:12px;height:36px;padding:0 14px;font:700 13px 'Pretendard',sans-serif;cursor:pointer}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.kpi{background:var(--bg);border-radius:14px;padding:12px}
-.kpi b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em}
-.kpi span{font-size:12px;color:var(--ink3);font-weight:600}
-h2{margin:0 0 10px;font-size:16px;font-weight:800;letter-spacing:-.02em}
-.tw{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th{font-weight:700;color:var(--ink3);text-align:right;padding:8px 8px;white-space:nowrap;cursor:pointer;user-select:none}
-th:first-child,td:first-child{text-align:left}
-td{padding:9px 8px;border-top:1px solid var(--line);text-align:right;white-space:nowrap;font-weight:600}
-td.nm{font-weight:700}
-.bar{position:relative;min-width:84px;height:22px;border-radius:7px;background:var(--bg);overflow:hidden;text-align:right}
-.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--bar)}
-.bar span{position:relative;padding:0 6px;line-height:22px;font-weight:700}
-.low{opacity:.45}
-.win{color:var(--green)}.lose{color:var(--red)}
-.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 6px;background:var(--blueSoft);color:var(--blue);margin-left:6px}
-.note{font-size:12px;color:var(--ink3);line-height:1.6;margin-top:8px}
-.empty{padding:36px 0;text-align:center;color:var(--ink3);font-weight:600}
-.deck{white-space:nowrap}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14px/1.5 'Pretendard',-apple-system,system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 72px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:28px 0 18px;flex-wrap:wrap}
+.top h1{margin:0;font-size:26px;line-height:1.2;font-weight:800;letter-spacing:-.035em}
+.top p{margin:6px 0 0;font-size:13px;color:var(--ink3)}
+.ghost{border:1px solid var(--line);background:var(--surface);border-radius:10px;height:34px;padding:0 12px;font-weight:600;font-size:13px;color:var(--ink2);cursor:pointer}
+.ghost:hover{border-color:var(--mid)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-bottom:14px}
+.seg{display:inline-flex;background:var(--line);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:8px;height:30px;padding:0 14px;font-weight:700;font-size:13px;color:var(--ink2);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(18,27,39,.12)}
+select,.num{height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);padding:0 10px;font-weight:600;font-size:13px}
+.fld{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);font-weight:600}
+.num{width:64px}
+details.more{position:relative;margin-left:auto}
+details.more summary{list-style:none;cursor:pointer}
+details.more summary::-webkit-details-marker{display:none}
+.pop{position:absolute;right:0;top:40px;z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:240px;box-shadow:0 12px 32px rgba(18,27,39,.16);display:grid;gap:12px}
+nav.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto;position:sticky;top:0;background:var(--bg);z-index:10}
+.tab{border:0;background:none;padding:12px 14px;font-weight:700;font-size:15px;color:var(--ink3);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ink)}
+.sheet{background:var(--surface);border-radius:20px;margin-top:16px;overflow:hidden}
+.sec{padding:22px 22px 24px}
+.sec+.sec{border-top:1px solid var(--line)}
+.sec h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.025em}
+.sec .d{margin:4px 0 16px;font-size:13px;color:var(--ink3);max-width:62ch}
+.glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0}
+.glance>div{padding:18px 22px;border-right:1px solid var(--line)}
+.glance>div:last-child{border-right:0}
+.glance small{display:block;font-size:12px;color:var(--ink3);font-weight:600}
+.glance b{display:block;font-size:17px;font-weight:800;margin-top:2px;letter-spacing:-.02em}
+.glance span{font-size:13px;font-weight:700}
+.up{color:var(--good)}.down{color:var(--bad)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;height:30px;padding:0 12px;font-weight:700;font-size:12.5px;color:var(--ink2);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.search{height:30px;border:1px solid var(--line);border-radius:99px;padding:0 12px;background:var(--surface);min-width:140px;font-size:13px}
+.tw{overflow-x:auto;margin:0 -22px;padding:0 22px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{font-weight:700;color:var(--ink3);text-align:right;padding:8px 10px;white-space:nowrap;cursor:pointer;user-select:none;font-size:12.5px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+th[aria-sort]{color:var(--ink)}
+td{padding:10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+td.nm{font-weight:700;color:var(--ink)}
+tr.low td{opacity:.4}
+.tier{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.rate{display:inline-flex;align-items:center;gap:10px;justify-content:flex-end}
+.rate b{min-width:48px;text-align:right;font-weight:800}
+.pk{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+.pk i{display:block;height:6px;border-radius:3px;background:var(--mid)}
+.pk b{min-width:42px;text-align:right;font-weight:700;color:var(--ink2)}
+svg text{font-family:inherit}
+.mapw{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.map{width:100%;min-width:600px;height:auto;display:block;touch-action:manipulation}
+.map .dot{cursor:pointer}
+.cap{min-height:44px;margin-top:10px;padding:10px 14px;background:var(--soft);border-radius:12px;font-size:13px;color:var(--ink2);font-weight:600}
+.cap b{color:var(--ink);font-weight:800}
+.empty{padding:56px 22px;text-align:center}
+.empty b{display:block;font-size:16px;font-weight:800}
+.empty p{margin:6px auto 0;color:var(--ink3);max-width:44ch}
+.note{font-size:12px;color:var(--ink3);line-height:1.65;margin-top:14px;max-width:70ch}
+.foot{margin-top:22px;font-size:12px;color:var(--ink3);line-height:1.7;text-align:center}
+.deck{font-size:15px}
+.deck small{font-size:11px;color:var(--ink3);font-weight:600;margin:0 4px 0 2px}
+.dtl td{background:var(--soft);white-space:normal;text-align:left;padding:12px 14px}
+.dtl .g{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px}
+tr.clk{cursor:pointer}
+tr.clk:hover td{background:var(--soft)}
+.sk{display:flex;gap:12px;align-items:center}
+.sk i{flex:1;height:14px;border-radius:7px;background:var(--line)}
+@media (max-width:640px){.wrap{padding:0 14px 56px}.sec{padding:18px 16px 20px}.tw{margin:0 -16px;padding:0 16px}.glance>div{border-right:0;border-bottom:1px solid var(--line);padding:14px 16px}.glance>div:last-child{border-bottom:0}details.more{margin-left:0}.top h1{font-size:23px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header><h1>🐾 애니멀 브롤 통계</h1><div class="sub" id="meta">불러오는 중…</div></header>
-  <div class="card"><div class="row">
-    <select id="fVer"></select>
-    <select id="fMode"><option value="all">전체</option><option value="s">스테이지</option><option value="a">아레나</option></select>
-    <label>최소 표본 <input id="fMin" type="number" min="1" value="10" style="width:64px"></label>
-    <label><input id="fDbg" type="checkbox" checked> 디버그 기록 제외</label>
-    <select id="fLimit"><option>500</option><option selected>1000</option><option>2000</option></select>
-    <button class="btn" id="reload">새로고침</button>
+  <header class="top">
+    <div><h1>애니멀 브롤 통계</h1><p id="meta">불러오는 중</p></div>
+    <button class="ghost" id="reload" type="button">새로고침</button>
+  </header>
+  <div class="bar">
+    <div class="seg" id="fMode" role="group" aria-label="전투 종류"><button type="button" data-v="all" aria-pressed="true">전체</button><button type="button" data-v="s" aria-pressed="false">스테이지</button><button type="button" data-v="a" aria-pressed="false">아레나</button></div>
+    <label class="fld">버전 <select id="fVer"></select></label>
+    <label class="fld">최소 표본 <input class="num" id="fMin" type="number" min="1" value="10"></label>
+    <details class="more"><summary class="ghost">설정</summary><div class="pop">
+      <label class="fld"><input id="fDbg" type="checkbox" checked> 디버그 기록 제외</label>
+      <label class="fld">읽어올 기록 <select id="fLimit"><option>500</option><option selected>1000</option><option>2000</option></select></label>
+      <div class="note" id="readNote" style="margin:0"></div>
+    </div></details>
   </div>
-  <div class="note" id="readNote"></div></div>
-  <div class="tabs" id="tabs"></div>
-  <div id="view"></div>
-  <div class="note" style="text-align:center;margin-top:24px">승률은 강한 유저가 좋은 스킬을 더 많이 쓰는 영향을 받아요. 표본이 적은 항목은 흐리게 표시돼요. 기록은 게임이 보낸 값이라 조작이 섞일 수 있어요.</div>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <main id="view" aria-live="polite"></main>
+  <p class="foot">승률은 강한 유저가 좋은 스킬을 더 많이 쓰는 영향을 받아요. 점 양옆의 선은 95% 신뢰구간이고, 표본이 적은 항목은 흐리게 보여요.<br>기록은 게임이 보낸 값이라 조작이 섞일 수 있어요.</p>
 </div>
 <script>window.FIREBASE_CONFIG={apiKey:"AIzaSyDfeqUmX_KTWc44fJgeJmwR05AiJi7tE9A",authDomain:"animalbrawl.firebaseapp.com",projectId:"animalbrawl",storageBucket:"animalbrawl.firebasestorage.app",messagingSenderId:"515430014547",appId:"1:515430014547:web:2fbede5cc859049c1df0a6"};</script>
 <script type="module">
 const NAMES = {"f": [["dog", "🐶", "강아지", "n"], ["rabbit", "🐰", "토끼", "n"], ["fox", "🦊", "여우", "r"], ["frog", "🐸", "개구리", "r"], ["wolf", "🐺", "늑대", "e"], ["panda", "🐼", "판다", "e"], ["tiger", "🐯", "호랑이", "m"], ["bear", "🐻", "곰", "m"], ["lion", "🦁", "사자", "l"], ["eagle", "🦅", "독수리", "l"], ["dragon", "🐲", "용", "t"], ["unicorn", "🦄", "유니콘", "t"]], "s": [["fire", "🔥", "불꽃", "n"], ["smash", "👊", "강타", "n"], ["wind", "🌪️", "회오리", "n"], ["firstaid", "🩹", "응급처치", "n"], ["stone", "🪨", "돌팔매", "n"], ["ice", "❄️", "얼음창", "r"], ["vamp", "🩸", "흡혈", "r"], ["poison", "☠️", "맹독", "r"], ["rush", "💨", "질풍참", "r"], ["barrier", "🛡️", "보호막", "r"], ["bolt", "⚡", "번개", "e"], ["bomb", "💥", "폭발", "e"], ["volley", "🏹", "화살비", "e"], ["swamp", "🕸️", "끈끈이 늪", "e"], ["rage", "😡", "광폭화", "e"], ["inferno", "🌋", "불바다", "m"], ["hole", "🌀", "블랙홀", "m"], ["snipe", "🎯", "저격", "m"], ["storm", "⛈️", "뇌우", "m"], ["bloodlust", "🧛", "혈귀화", "m"], ["meteor", "☄️", "운석", "l"], ["bladedance", "🗡️", "검무", "l"], ["wave", "🌊", "해일", "l"], ["timestop", "⏳", "시간 정지", "l"], ["sanctuary", "✨", "성역", "l"], ["nova", "🌌", "초신성 폭발", "t"], ["moonblade", "🌙", "기습", "t"], ["prison", "🕳️", "차원 감옥", "t"], ["eclipse", "☀️", "일식", "t"], ["shower", "🌠", "유성우", "t"]], "evo": {"fire": {"a": "잿더미", "b": "불똥"}, "smash": {"a": "약점 파쇄", "b": "반동 강타"}, "wind": {"a": "모래 바람", "b": "소용돌이 방패"}, "firstaid": {"a": "해독 붕대", "b": "비상 탈출"}, "stone": {"a": "입막음 돌", "b": "뜀박질 돌"}, "ice": {"a": "설상가상", "b": "냉기"}, "vamp": {"a": "빈혈", "b": "저주 받은 송곳니"}, "poison": {"a": "신경독", "b": "부식독"}, "rush": {"a": "가속도", "b": "점멸"}, "barrier": {"a": "가시 방벽", "b": "수호자"}, "bolt": {"a": "피뢰침", "b": "연쇄 번개"}, "bomb": {"a": "대폭발", "b": "지뢰 매설"}, "volley": {"a": "올가미 화살", "b": "다다익선"}, "swamp": {"a": "독기 늪", "b": "구속"}, "rage": {"a": "위협의 포효", "b": "가시갑옷"}, "inferno": {"a": "불의 가호", "b": "유황 연기"}, "hole": {"a": "사건의 지평선", "b": "상대론"}, "snipe": {"a": "헤드샷", "b": "퀵드로우"}, "storm": {"a": "피뢰침", "b": "감전 폭풍"}, "bloodlust": {"a": "사냥의 표식", "b": "핏빛 질주"}, "meteor": {"a": "크레이터", "b": "쌍둥이 운석"}, "bladedance": {"a": "피의 검무", "b": "α"}, "wave": {"a": "두 번째 파도", "b": "서핑"}, "timestop": {"a": "시간 도둑", "b": "되감기"}, "sanctuary": {"a": "징벌의 성역", "b": "정화의 성역"}, "nova": {"a": "성운", "b": "빅뱅"}, "moonblade": {"a": "그림자 처형", "b": "잠복근무"}, "prison": {"a": "공허의 속삭임", "b": "균열"}, "eclipse": {"a": "프리즘", "b": "황혼"}, "shower": {"a": "오로라", "b": "궤도 수정"}}};
 const FN = Object.fromEntries(NAMES.f.map(x => [x[0], x])), SN = Object.fromEntries(NAMES.s.map(x => [x[0], x]));
 const TIER = { n:'일반', r:'희귀', e:'영웅', m:'신화', l:'전설', t:'초월' };
+const ATTN = { basic:'기본 공격', thorns:'가시 반사', passive:'패시브', lifesteal:'흡혈', dot:'지속 피해', hot:'지속 회복', etc:'기타' };
 const $ = id => document.getElementById(id), qs = new URLSearchParams(location.search);
-const fnm = id => FN[id] ? FN[id][1] + ' ' + FN[id][2] : id, snm = id => SN[id] ? SN[id][1] + ' ' + SN[id][2] : id;
+const fnm = id => FN[id] ? FN[id][1] + ' ' + FN[id][2] : id, snm = id => SN[id] ? SN[id][1] + ' ' + SN[id][2] : (ATTN[id] || id);
 const evn = (sid, k) => k ? ((NAMES.evo[sid] || {})[k] || ('진화 ' + k)) : '진화 없음';
-const pct = v => (v*100).toFixed(1) + '%', num = v => Math.round(v).toLocaleString('ko-KR');
+const pct = (v, d = 1) => (v*100).toFixed(d) + '%', num = v => Math.round(v).toLocaleString('ko-KR');
 const CACHE_KEY = 'abstats_cache', TTL = 15*60*1000;
-let ALL = [], reads = 0, fromCache = false, tab = 'skill', sortKey = {}, loadedAt = 0;
+let ALL = [], reads = 0, fromCache = false, tab = 'skill', loadedAt = 0, mode = 'all', tierF = 'all', q = '', open = -1;
+const sortKey = {};
 
-/* ───── 데이터 불러오기 (일반 모드: Firestore, ?demo=1: 가짜 데이터) ───── */
+/* ───── 데이터 ───── */
 async function fetchRecords(limit, force) {
   if (qs.get('demo')) return demoData();
   try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (!force && c && c.limit === limit && Date.now() - c.at < TTL) { fromCache = true; loadedAt = c.at; return c.rows; } } catch (e) {}
@@ -87,138 +142,190 @@ async function fetchRecords(limit, force) {
   return rows;
 }
 function demoData() {
-  const out = [], fs = NAMES.f.map(x => x[0]), ss = NAMES.s.map(x => x[0]), R = (a) => a[Math.floor(Math.random()*a.length)];
-  const deck = () => ({ f:{ id:R(fs), lv:1 + Math.floor(Math.random()*20) }, s:[0,1,2].map(() => { const id = R(ss); return { id, lv:1 + Math.floor(Math.random()*15), evo:R([null,'a','b']), scd:2 }; }) });
-  for (let i = 0; i < 600; i++) {
+  const out = [], fs = NAMES.f.map(x => x[0]), ss = NAMES.s.map(x => x[0]), R = a => a[Math.floor(Math.random()*a.length)];
+  const bias = Object.fromEntries(ss.map(id => [id, (Math.random() - 0.5)*0.3])), fb = Object.fromEntries(fs.map(id => [id, (Math.random() - 0.5)*0.2]));
+  const deck = () => ({ f:{ id:R(fs), lv:1 + Math.floor(Math.random()*20) }, s:[0,1,2].map(() => ({ id:R(ss), lv:1 + Math.floor(Math.random()*15), evo:R([null,'a','b']), scd:2 })) });
+  for (let i = 0; i < 900; i++) {
     const a = Math.random() < 0.4, me = deck(), att = {}; me.s.forEach(s => { att[s.id] = [Math.round(Math.random()*5000), Math.round(Math.random()*500), 0]; }); att.basic = [Math.round(Math.random()*8000), 0, 0];
-    const r = { t:a?'a':'s', stage:a?0:1 + Math.floor(Math.random()*30), win:Math.random() < 0.55, dur:20 + Math.floor(Math.random()*90), w:a?1:R([1,1,10]), ver:R(['3-30','3-31']), me, att, dbg:Math.random() < 0.05, at:Date.now() - i*600000, srv:Date.now() - i*600000 };
-    if (a) { r.opp = deck(); r.oatt = {}; r.pw = [400 + Math.round(Math.random()*600), 400 + Math.round(Math.random()*600)]; }
+    const p = 0.5 + fb[me.f.id] + me.s.reduce((x, s) => x + bias[s.id], 0)/3;
+    const r = { t:a?'a':'s', stage:a?0:1 + Math.floor(Math.random()*30), win:Math.random() < p, dur:20 + Math.floor(Math.random()*90), w:a?1:R([1,1,10]), ver:R(['3-31','3-31','3-30']), me, att, dbg:Math.random() < 0.05, at:Date.now() - i*600000, srv:Date.now() - i*600000 };
+    if (a) { r.opp = deck(); r.oatt = { basic:[3000,0,0] }; r.pw = [400 + Math.round(Math.random()*600), 400 + Math.round(Math.random()*600)]; }
     out.push(r);
   }
   return out;
 }
 
 /* ───── 집계 ───── */
-function view() {
-  const ver = $('fVer').value, mode = $('fMode').value, dbg = $('fDbg').checked;
-  return ALL.filter(r => (!dbg || !r.dbg) && (ver === 'all' || r.ver === ver) && (mode === 'all' || r.t === mode));
-}
-/* 한 전투에서 '덱' 표본을 뽑는다 (아레나는 양쪽 덱, 스테이지는 내 덱) */
+const view = () => { const ver = $('fVer').value, dbg = $('fDbg').checked; return ALL.filter(r => (!dbg || !r.dbg) && (ver === 'all' || r.ver === ver) && (mode === 'all' || r.t === mode)); };
 function samples(rows) {
   const out = [];
   for (const r of rows) {
     if (!r.me || !r.me.f) continue;
-    out.push({ deck:r.me, win:r.win, att:r.att || {}, w:r.w || 1, t:r.t, dur:r.dur });
-    if (r.t === 'a' && r.opp && r.opp.f) out.push({ deck:r.opp, win:!r.win, att:r.oatt || {}, w:r.w || 1, t:r.t, dur:r.dur });
+    out.push({ deck:r.me, win:r.win, att:r.att || {}, w:r.w || 1, dur:r.dur });
+    if (r.t === 'a' && r.opp && r.opp.f) out.push({ deck:r.opp, win:!r.win, att:r.oatt || {}, w:r.w || 1, dur:r.dur });
   }
   return out;
 }
-const sumAtt = (att, k) => att && att[k] ? att[k][0] : 0;
 const totAtt = att => Object.values(att || {}).reduce((a, v) => a + (v[0] || 0), 0);
-
-function sortedRows(name, rows, defKey) {
-  const k = sortKey[name] || { key:defKey, dir:-1 };
-  return rows.slice().sort((a, b) => (typeof a[k.key] === 'string' ? a[k.key].localeCompare(b[k.key]) : a[k.key] - b[k.key])*k.dir);
-}
-function table(name, cols, rows, defKey) {
-  const min = +$('fMin').value || 1, list = sortedRows(name, rows, defKey);
-  if (!list.length) return '<div class="empty">표시할 기록이 없어요</div>';
-  const head = cols.map(c => `<th data-s="${name}:${c.key}">${c.label}${(sortKey[name] || { key:defKey }).key === c.key ? ((sortKey[name] || { dir:-1 }).dir < 0 ? ' ▼' : ' ▲') : ''}</th>`).join('');
-  const body = list.map(r => `<tr class="${r.n < min ? 'low' : ''}">${cols.map(c => `<td class="${c.key === 'name' ? 'nm' : ''}">${c.fmt ? c.fmt(r) : r[c.key]}</td>`).join('')}</tr>`).join('');
-  return `<div class="tw"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
-}
-const winBar = r => `<div class="bar"><i style="width:${Math.min(100, r.rate*100)}%"></i><span class="${r.rate >= 0.5 ? 'win' : 'lose'}">${pct(r.rate)}</span></div>`;
-const pickBar = r => `<div class="bar"><i style="width:${Math.min(100, r.pick*100*2)}%"></i><span>${pct(r.pick)}</span></div>`;
-
+function wilson(win, n) { if (!n) return [0, 1]; const z = 1.96, p = win/n, d = 1 + z*z/n, c = p + z*z/(2*n), m = z*Math.sqrt(p*(1-p)/n + z*z/(4*n*n)); return [(c - m)/d, (c + m)/d]; }
+function fin(o, tot) { o.rate = o.n ? o.win/o.n : 0; o.pick = o.n/(tot || 1); o.ci = wilson(o.rate*o.cnt, o.cnt); return o; }
 function aggFighters(rows) {
   const S = samples(rows), tot = S.reduce((a, s) => a + s.w, 0), m = {};
-  for (const s of S) { const id = s.deck.f.id, o = m[id] || (m[id] = { id, name:fnm(id), tier:TIER[(FN[id] || [])[3]] || '', n:0, win:0, lv:0, dmg:0, dur:0 }); o.n += s.w; o.win += s.w*(s.win ? 1 : 0); o.lv += s.w*s.deck.f.lv; o.dmg += s.w*totAtt(s.att); o.dur += s.w*(s.dur || 0); }
-  return Object.values(m).map(o => ({ ...o, rate:o.win/o.n, pick:o.n/(tot || 1), avgLv:o.lv/o.n, avgDmg:o.dmg/o.n, avgDur:o.dur/o.n }));
+  for (const s of S) { const id = s.deck.f.id, o = m[id] || (m[id] = { id, name:fnm(id), tier:(FN[id] || [])[3], n:0, cnt:0, win:0, lv:0, dmg:0, dur:0 }); o.n += s.w; o.cnt++; o.win += s.w*(s.win ? 1 : 0); o.lv += s.w*s.deck.f.lv; o.dmg += s.w*totAtt(s.att); o.dur += s.w*(s.dur || 0); }
+  return Object.values(m).map(o => { fin(o, tot); o.avgLv = o.lv/o.n; o.avgDmg = o.dmg/o.n; o.avgDur = o.dur/o.n; return o; });
 }
 function aggSkills(rows) {
   const S = samples(rows), tot = S.reduce((a, s) => a + s.w, 0), m = {}, ev = {};
   for (const s of S) for (const k of s.deck.s) {
     if (!k) continue;
-    const o = m[k.id] || (m[k.id] = { id:k.id, name:snm(k.id), tier:TIER[(SN[k.id] || [])[3]] || '', n:0, win:0, lv:0, dmg:0, heal:0 });
-    o.n += s.w; o.win += s.w*(s.win ? 1 : 0); o.lv += s.w*k.lv; o.dmg += s.w*sumAtt(s.att, k.id); const a = s.att[k.id]; if (a) o.heal += s.w*((a[1] || 0) + (a[2] || 0));
-    const ek = k.id + ':' + (k.evo || ''), e = ev[ek] || (ev[ek] = { sid:k.id, key:k.evo || '', n:0, win:0 }); e.n += s.w; e.win += s.w*(s.win ? 1 : 0);
+    const o = m[k.id] || (m[k.id] = { id:k.id, name:snm(k.id), tier:(SN[k.id] || [])[3], n:0, cnt:0, win:0, lv:0, dmg:0, heal:0 });
+    o.n += s.w; o.cnt++; o.win += s.w*(s.win ? 1 : 0); o.lv += s.w*k.lv; const a = s.att[k.id]; if (a) { o.dmg += s.w*(a[0] || 0); o.heal += s.w*((a[1] || 0) + (a[2] || 0)); }
+    const e = ((ev[k.id] = ev[k.id] || {})[k.evo || ''] = ev[k.id][k.evo || ''] || { n:0, cnt:0, win:0 }); e.n += s.w; e.cnt++; e.win += s.w*(s.win ? 1 : 0);
   }
-  return { list:Object.values(m).map(o => ({ ...o, rate:o.win/o.n, pick:o.n/(tot || 1), avgLv:o.lv/o.n, avgDmg:o.dmg/o.n, avgHeal:o.heal/o.n })), evo:Object.values(ev) };
+  return { list:Object.values(m).map(o => { fin(o, tot); o.avgLv = o.lv/o.n; o.avgDmg = o.dmg/o.n; o.avgHeal = o.heal/o.n; return o; }), evo:ev };
+}
+
+/* ───── 그리기 조각 ───── */
+const tcol = t => `var(--t-${t || 'n'})`;
+const rateCls = r => r >= 0.5 ? 'up' : 'down';
+/* 50%를 가운데로 둔 승률 표시: 점 = 승률, 선 = 95% 신뢰구간 */
+function forest(o) {
+  const lo = 0.3, hi = 0.7, X = v => 4 + (Math.min(hi, Math.max(lo, v)) - lo)/(hi - lo)*132, c = o.rate >= 0.5 ? 'var(--good)' : 'var(--bad)';
+  return `<span class="rate"><svg width="140" height="20" viewBox="0 0 140 20" aria-hidden="true"><line x1="4" x2="136" y1="10" y2="10" stroke="var(--line)" stroke-width="2" stroke-linecap="round"/><line x1="70" x2="70" y1="3" y2="17" stroke="var(--mid)" stroke-width="1.5"/><line x1="${X(o.ci[0])}" x2="${X(o.ci[1])}" y1="10" y2="10" stroke="${c}" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="${X(o.rate)}" cy="10" r="4.5" fill="${c}"/></svg><b class="${rateCls(o.rate)}">${pct(o.rate)}</b></span>`;
+}
+const pickCell = (o, max) => `<span class="pk"><i style="width:${Math.max(2, o.pick/(max || 1)*60)}px"></i><b>${pct(o.pick)}</b></span>`;
+function sortRows(name, rows, def) { const k = sortKey[name] || { key:def, dir:-1 }; return rows.slice().sort((a, b) => (typeof a[k.key] === 'string' ? a[k.key].localeCompare(b[k.key], 'ko') : (a[k.key] - b[k.key]))*k.dir); }
+function table(name, cols, rows, def, limit) {
+  const min = +$('fMin').value || 1, k = sortKey[name] || { key:def, dir:-1 };
+  let list = sortRows(name, rows, def); if (limit) list = list.slice(0, limit);
+  if (!list.length) return `<div class="note">조건에 맞는 항목이 없어요.</div>`;
+  return `<div class="tw"><table><thead><tr>${cols.map(c => `<th data-s="${name}:${c.key}" ${k.key === c.key ? `aria-sort="${k.dir < 0 ? 'descending' : 'ascending'}"` : ''}>${c.label}${k.key === c.key ? (k.dir < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead><tbody>${list.map(r => `<tr class="${r.cnt < min ? 'low' : ''}">${cols.map(c => `<td class="${c.key === 'name' ? 'nm' : ''}">${c.fmt ? c.fmt(r) : r[c.key]}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+const nameCell = r => `<span class="tier" style="background:${tcol(r.tier)}"></span>${r.name}`;
+function glance(items) { return `<div class="sheet" style="margin-top:16px"><div class="glance">${items.map(i => `<div><small>${i[0]}</small><b>${i[1]}</b><span class="${i[3] || ''}">${i[2]}</span></div>`).join('')}</div></div>`; }
+function kpis(rows) {
+  const w = rows.reduce((a, r) => a + (r.w || 1), 0), wins = rows.reduce((a, r) => a + (r.w || 1)*(r.win ? 1 : 0), 0), dur = rows.reduce((a, r) => a + (r.w || 1)*(r.dur || 0), 0);
+  return [['기록 수', num(rows.length) + '건', mode === 'all' ? '스테이지와 아레나 합계' : (mode === 's' ? '스테이지' : '아레나')], ['승률', w ? pct(wins/w) : '-', '가중 평균'], ['평균 전투 시간', w ? Math.round(dur/w) + '초' : '-', '가중 평균']];
+}
+function picks(list, min) {
+  const ok = list.filter(o => o.cnt >= min); if (!ok.length) return null;
+  const by = f => ok.slice().sort(f)[0];
+  return [['가장 잘 이기는 쪽', by((a, b) => b.rate - a.rate)], ['가장 고전하는 쪽', by((a, b) => a.rate - b.rate)], ['가장 많이 쓰는 쪽', by((a, b) => b.pick - a.pick)]];
+}
+function mapChart(list, min) {
+  const L = list.filter(o => o.cnt >= min);
+  if (L.length < 3) return `<div class="note">표본이 ${min}건 이상인 항목이 3개 이상 쌓이면 지도가 그려져요.</div>`;
+  const W = 720, H = 340, P = { l:48, r:16, t:14, b:34 }, mx = Math.max(...L.map(o => o.pick))*1.12, avgPick = L.reduce((a, o) => a + o.pick, 0)/L.length;
+  const ymin = Math.min(0.4, Math.min(...L.map(o => o.rate)) - 0.02), ymax = Math.max(0.6, Math.max(...L.map(o => o.rate)) + 0.02);
+  const X = v => P.l + v/mx*(W - P.l - P.r), Y = v => P.t + (1 - (v - ymin)/(ymax - ymin))*(H - P.t - P.b);
+  const gy = []; for (let v = Math.ceil(ymin*20)/20; v <= ymax + 1e-6; v += 0.05) gy.push(v);
+  const gx = []; for (let i = 0; i <= 4; i++) gx.push(mx*i/4);
+  return `<div class="mapw"><svg class="map" viewBox="0 0 ${W} ${H}" role="img" aria-label="채택률과 승률 산점도">
+    <rect x="${X(avgPick)}" y="${P.t}" width="${W - P.r - X(avgPick)}" height="${Y(0.5) - P.t}" fill="var(--badSoft)" opacity=".55"/>
+    ${gy.map(v => `<line x1="${P.l}" x2="${W - P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" ${Math.abs(v - 0.5) < 1e-6 ? 'stroke-width="2" stroke="var(--mid)"' : ''}/><text x="${P.l - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="var(--ink3)">${Math.round(v*100)}%</text>`).join('')}
+    ${gx.map(v => `<text x="${X(v)}" y="${H - 12}" text-anchor="middle" font-size="11" fill="var(--ink3)">${pct(v, 0)}</text>`).join('')}
+    <line x1="${X(avgPick)}" x2="${X(avgPick)}" y1="${P.t}" y2="${H - P.b}" stroke="var(--mid)" stroke-dasharray="4 4"/>
+    <text x="${W - P.r - 6}" y="${P.t + 14}" text-anchor="end" font-size="11.5" font-weight="700" fill="var(--bad)">자주 쓰고 잘 이김</text>
+    <text x="${W - P.r - 6}" y="${H - P.b - 8}" text-anchor="end" font-size="11.5" font-weight="700" fill="var(--ink3)">자주 쓰는데 약함</text>
+    <text x="${P.l + 6}" y="${P.t + 14}" font-size="11.5" font-weight="700" fill="var(--ink3)">잘 이기는데 안 씀</text>
+    <text x="${P.l + 6}" y="${H - P.b - 8}" font-size="11.5" font-weight="700" fill="var(--ink3)">안 쓰고 약함</text>
+    ${L.map(o => `<g class="dot" data-i="${o.id}" tabindex="0" role="button" aria-label="${o.name}"><circle cx="${X(o.pick)}" cy="${Y(o.rate)}" r="14" fill="var(--surface)" stroke="${tcol(o.tier)}" stroke-width="2"/><text x="${X(o.pick)}" y="${Y(o.rate) + 5.5}" text-anchor="middle" font-size="15">${(SN[o.id] || FN[o.id] || [])[1] || '?'}</text></g>`).join('')}
+    <text x="${(W + P.l)/2}" y="${H - 1}" text-anchor="middle" font-size="11" fill="var(--ink3)" opacity="0">채택률</text></svg></div>
+    <div class="cap" id="cap">점을 누르면 자세한 수치가 보여요. 오른쪽 위로 갈수록 자주 쓰이고 승률도 높은 항목이에요.</div>`;
 }
 
 /* ───── 탭 ───── */
 const TABS = [['skill', '스킬'], ['fighter', '파이터'], ['stage', '스테이지'], ['arena', '아레나'], ['log', '전투 기록']];
-function kpis(rows) {
-  const w = rows.reduce((a, r) => a + (r.w || 1), 0), wins = rows.reduce((a, r) => a + (r.w || 1)*(r.win ? 1 : 0), 0), dur = rows.reduce((a, r) => a + (r.w || 1)*(r.dur || 0), 0);
-  return `<div class="kpis"><div class="kpi"><b>${num(rows.length)}</b><span>기록 수</span></div><div class="kpi"><b>${w ? pct(wins/w) : '-'}</b><span>승률 (가중)</span></div><div class="kpi"><b>${w ? Math.round(dur/w) + '초' : '-'}</b><span>평균 전투 시간</span></div></div>`;
+function toolsHtml(withTier) {
+  return `<div class="tools">${withTier ? ['all', 'n', 'r', 'e', 'm', 'l', 't'].map(t => `<button type="button" class="chip" data-tier="${t}" aria-pressed="${tierF === t}">${t === 'all' ? '모든 등급' : TIER[t]}</button>`).join('') : ''}<input class="search" id="q" type="search" placeholder="이름 검색" value="${q}" aria-label="이름 검색"></div>`;
 }
+const flt = list => list.filter(o => (tierF === 'all' || o.tier === tierF) && (!q || o.name.includes(q)));
 const TV = {
   skill(rows) {
-    const a = aggSkills(rows), cols = [
-      { key:'name', label:'스킬' }, { key:'tier', label:'등급' }, { key:'n', label:'표본', fmt:r => num(r.n) },
-      { key:'rate', label:'승률', fmt:winBar }, { key:'pick', label:'채택률', fmt:pickBar }, { key:'avgLv', label:'평균 Lv', fmt:r => r.avgLv.toFixed(1) },
-      { key:'avgDmg', label:'평균 피해', fmt:r => num(r.avgDmg) }, { key:'avgHeal', label:'평균 회복·보호', fmt:r => num(r.avgHeal) } ];
-    const evRows = a.evo.map(e => ({ name:snm(e.sid) + ' · ' + evn(e.sid, e.key), n:e.n, rate:e.win/e.n })).sort((x, y) => x.name.localeCompare(y.name));
-    return `<div class="card">${kpis(rows)}</div><div class="card"><h2>스킬별 승률</h2>${table('skill', cols, a.list, 'n')}<div class="note">채택률은 전체 덱 중 해당 스킬을 낀 비율이에요. 피해는 그 스킬을 낀 전투의 평균이에요. 아레나는 양쪽 덱을 모두 표본으로 세요.</div></div>
-      <div class="card"><h2>진화별 승률</h2>${table('evo', [{ key:'name', label:'스킬 · 진화' }, { key:'n', label:'표본', fmt:r => num(r.n) }, { key:'rate', label:'승률', fmt:winBar }], evRows, 'n')}</div>`;
+    const a = aggSkills(rows), min = +$('fMin').value || 1, p = picks(a.list, min), list = flt(a.list), mp = Math.max(...a.list.map(o => o.pick), 0.01);
+    const cols = [{ key:'name', label:'스킬', fmt:nameCell }, { key:'cnt', label:'표본', fmt:r => num(r.cnt) }, { key:'rate', label:'승률', fmt:forest }, { key:'pick', label:'채택률', fmt:r => pickCell(r, mp) }, { key:'avgLv', label:'평균 Lv', fmt:r => r.avgLv.toFixed(1) }, { key:'avgDmg', label:'평균 피해', fmt:r => num(r.avgDmg) }, { key:'avgHeal', label:'회복·보호', fmt:r => num(r.avgHeal) }];
+    const evRows = Object.keys(a.evo).map(id => ({ id, name:snm(id), tier:(SN[id] || [])[3], e:a.evo[id], cnt:Object.values(a.evo[id]).reduce((x, y) => x + y.cnt, 0) })).filter(r => flt([r]).length).sort((x, y) => y.cnt - x.cnt);
+    const cell = (id, k, e) => e ? `<span class="${rateCls(e.win/e.n)}" style="${e.cnt < min ? 'opacity:.4' : ''}">${pct(e.win/e.n, 0)}</span> <span style="color:var(--ink3);font-weight:500">${e.cnt}</span>` : '<span style="color:var(--ink3)">-</span>';
+    return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>밸런스 지도</h2><p class="d">가로는 얼마나 자주 쓰는지, 세로는 이기는 비율이에요. 오른쪽 위에 몰린 스킬은 너프 후보, 왼쪽 아래는 버프 후보로 볼 수 있어요.</p>${mapChart(a.list, min)}</div>
+      ${p ? `<div class="sec" style="padding:0"><div class="glance" style="margin:0">${p.map(([l, o]) => `<div><small>${l}</small><b>${(SN[o.id] || [])[1] || ''} ${(SN[o.id] || [, , o.id])[2]}</b><span class="${rateCls(o.rate)}">승률 ${pct(o.rate)}</span> <span style="color:var(--ink3)">· 채택 ${pct(o.pick)}</span></div>`).join('')}</div></div>` : ''}
+      <div class="sec"><h2>스킬별 승률</h2><p class="d">점은 승률, 점 옆 선은 95% 신뢰구간이에요. 가운데 세로선이 50%예요.</p>${toolsHtml(true)}${table('skill', cols, list, 'cnt')}</div>
+      <div class="sec"><h2>진화별 승률</h2><p class="d">칸 안의 숫자는 승률과 표본 수예요.</p><div class="tw"><table><thead><tr><th style="cursor:default">스킬</th><th style="cursor:default">진화 없음</th><th style="cursor:default">진화 1</th><th style="cursor:default">진화 2</th></tr></thead><tbody>${evRows.map(r => `<tr><td class="nm"><span class="tier" style="background:${tcol(r.tier)}"></span>${r.name}</td><td>${cell(r.id, '', r.e[''])}</td><td title="${evn(r.id, 'a')}">${cell(r.id, 'a', r.e.a)} <span style="color:var(--ink3);font-weight:500;font-size:12px">${evn(r.id, 'a')}</span></td><td title="${evn(r.id, 'b')}">${cell(r.id, 'b', r.e.b)} <span style="color:var(--ink3);font-weight:500;font-size:12px">${evn(r.id, 'b')}</span></td></tr>`).join('')}</tbody></table></div></div></div>`;
   },
   fighter(rows) {
-    const list = aggFighters(rows), cols = [
-      { key:'name', label:'파이터' }, { key:'tier', label:'등급' }, { key:'n', label:'표본', fmt:r => num(r.n) }, { key:'rate', label:'승률', fmt:winBar }, { key:'pick', label:'채택률', fmt:pickBar },
-      { key:'avgLv', label:'평균 Lv', fmt:r => r.avgLv.toFixed(1) }, { key:'avgDmg', label:'평균 총 피해', fmt:r => num(r.avgDmg) }, { key:'avgDur', label:'평균 시간', fmt:r => Math.round(r.avgDur) + '초' } ];
-    return `<div class="card">${kpis(rows)}</div><div class="card"><h2>파이터별 승률</h2>${table('fighter', cols, list, 'n')}</div>`;
+    const list0 = aggFighters(rows), min = +$('fMin').value || 1, p = picks(list0, min), list = flt(list0), mp = Math.max(...list0.map(o => o.pick), 0.01);
+    const cols = [{ key:'name', label:'파이터', fmt:nameCell }, { key:'cnt', label:'표본', fmt:r => num(r.cnt) }, { key:'rate', label:'승률', fmt:forest }, { key:'pick', label:'채택률', fmt:r => pickCell(r, mp) }, { key:'avgLv', label:'평균 Lv', fmt:r => r.avgLv.toFixed(1) }, { key:'avgDmg', label:'평균 총 피해', fmt:r => num(r.avgDmg) }, { key:'avgDur', label:'평균 시간', fmt:r => Math.round(r.avgDur) + '초' }];
+    return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>밸런스 지도</h2><p class="d">파이터를 같은 방식으로 비교해요.</p>${mapChart(list0, min)}</div>
+      ${p ? `<div class="sec" style="padding:0"><div class="glance" style="margin:0">${p.map(([l, o]) => `<div><small>${l}</small><b>${FN[o.id] ? FN[o.id][1] + ' ' + FN[o.id][2] : o.id}</b><span class="${rateCls(o.rate)}">승률 ${pct(o.rate)}</span> <span style="color:var(--ink3)">· 채택 ${pct(o.pick)}</span></div>`).join('')}</div></div>` : ''}
+      <div class="sec"><h2>파이터별 승률</h2>${toolsHtml(true)}${table('fighter', cols, list, 'cnt')}</div></div>`;
   },
   stage(rows) {
     rows = rows.filter(r => r.t === 's'); const m = {};
-    for (const r of rows) { const o = m[r.stage] || (m[r.stage] = { stage:r.stage, name:'STAGE ' + r.stage, n:0, win:0, dur:0, cnt:0, f:{} }); const w = r.w || 1; o.n += w; o.win += w*(r.win ? 1 : 0); o.dur += w*(r.dur || 0); o.cnt++; if (r.me && r.me.f) o.f[r.me.f.id] = (o.f[r.me.f.id] || 0) + w; }
-    const list = Object.values(m).map(o => ({ ...o, rate:o.win/o.n, avgDur:o.dur/o.n, top:fnm(Object.entries(o.f).sort((a, b) => b[1] - a[1])[0][0]) }));
-    const cols = [{ key:'stage', label:'스테이지', fmt:r => r.name }, { key:'n', label:'시도(가중)', fmt:r => num(r.n) }, { key:'rate', label:'클리어율', fmt:winBar }, { key:'avgDur', label:'평균 시간', fmt:r => Math.round(r.avgDur) + '초' }, { key:'top', label:'많이 쓴 파이터' }];
-    return `<div class="card">${kpis(rows)}</div><div class="card"><h2>스테이지별 클리어율</h2>${table('stage', cols, list, 'stage')}<div class="note">반복 전투는 10%만 기록해 가중치를 곱해 계산해요. 현재 도전 중인 스테이지의 승률이 가장 정확해요.</div></div>`;
+    for (const r of rows) { const o = m[r.stage] || (m[r.stage] = { stage:r.stage, name:'STAGE ' + r.stage, n:0, cnt:0, win:0, dur:0, f:{} }); const w = r.w || 1; o.n += w; o.cnt++; o.win += w*(r.win ? 1 : 0); o.dur += w*(r.dur || 0); if (r.me && r.me.f) o.f[r.me.f.id] = (o.f[r.me.f.id] || 0) + w; }
+    const list = Object.values(m).map(o => { fin(o, 1); o.avgDur = o.dur/o.n; o.top = fnm(Object.entries(o.f).sort((a, b) => b[1] - a[1])[0][0]); return o; }).sort((a, b) => a.stage - b.stage);
+    const min = +$('fMin').value || 1;
+    let chart = '<div class="note">스테이지 기록이 쌓이면 클리어율 그래프가 그려져요.</div>';
+    if (list.length) { const W = 720, H = 180, bw = Math.max(4, Math.min(22, (W - 40)/list.length - 3)); chart = `<div class="mapw"><svg class="map" viewBox="0 0 ${W} ${H + 24}" role="img" aria-label="스테이지별 클리어율"><line x1="30" x2="${W}" y1="${H/2}" y2="${H/2}" stroke="var(--mid)" stroke-dasharray="4 4"/><text x="0" y="${H/2 + 4}" font-size="11" fill="var(--ink3)">50%</text>${list.map((o, i) => { const x = 36 + i*(bw + 3), h = Math.max(2, o.rate*H); return `<rect x="${x}" y="${H - h}" width="${bw}" height="${h}" rx="3" fill="${o.rate >= 0.5 ? 'var(--good)' : 'var(--bad)'}" opacity="${o.cnt < min ? .3 : .85}"><title>STAGE ${o.stage} · ${pct(o.rate)} · ${o.cnt}건</title></rect>${list.length < 26 || i % 5 === 0 ? `<text x="${x + bw/2}" y="${H + 16}" text-anchor="middle" font-size="10.5" fill="var(--ink3)">${o.stage}</text>` : ''}`; }).join('')}</svg></div>`; }
+    const cols = [{ key:'stage', label:'스테이지', fmt:r => r.name }, { key:'cnt', label:'표본', fmt:r => num(r.cnt) }, { key:'rate', label:'클리어율', fmt:forest }, { key:'avgDur', label:'평균 시간', fmt:r => Math.round(r.avgDur) + '초' }, { key:'top', label:'많이 쓴 파이터' }];
+    return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>스테이지별 클리어율</h2><p class="d">50% 아래로 내려가는 구간이 막히는 지점이에요. 반복 전투는 10%만 기록하고 가중치를 곱해 계산해요.</p>${chart}</div><div class="sec"><h2>스테이지 표</h2>${table('stage', cols, list, 'stage')}</div></div>`;
   },
   arena(rows) {
-    rows = rows.filter(r => r.t === 'a'); const B = [['-30% 이하', -9, -0.3], ['-30~-10%', -0.3, -0.1], ['±10%', -0.1, 0.1], ['+10~+30%', 0.1, 0.3], ['+30% 이상', 0.3, 9]], pb = B.map(b => ({ name:b[0], lo:b[1], hi:b[2], n:0, win:0 }));
-    const pairs = {};
+    rows = rows.filter(r => r.t === 'a'); const B = [['상대보다 30% 이상 약함', -9, -0.3], ['30~10% 약함', -0.3, -0.1], ['비슷함(±10%)', -0.1, 0.1], ['10~30% 강함', 0.1, 0.3], ['30% 이상 강함', 0.3, 9]], pb = B.map(b => ({ name:b[0], lo:b[1], hi:b[2], n:0, cnt:0, win:0 })), pairs = {};
     for (const r of rows) {
-      if (r.pw && r.pw[1] > 0) { const d = (r.pw[0] - r.pw[1])/r.pw[1], b = pb.find(x => d >= x.lo && d < x.hi) || pb[pb.length - 1]; b.n++; b.win += r.win ? 1 : 0; }
-      if (r.me && r.opp && r.me.f && r.opp.f) { const k = r.me.f.id + '>' + r.opp.f.id, o = pairs[k] || (pairs[k] = { name:fnm(r.me.f.id) + '  vs  ' + fnm(r.opp.f.id), n:0, win:0 }); o.n++; o.win += r.win ? 1 : 0; }
+      if (r.pw && r.pw[1] > 0) { const d = (r.pw[0] - r.pw[1])/r.pw[1], b = pb.find(x => d >= x.lo && d < x.hi) || pb[pb.length - 1]; b.n++; b.cnt++; b.win += r.win ? 1 : 0; }
+      if (r.me && r.opp && r.me.f && r.opp.f) { const k = r.me.f.id + '>' + r.opp.f.id, o = pairs[k] || (pairs[k] = { name:fnm(r.me.f.id) + '  vs  ' + fnm(r.opp.f.id), n:0, cnt:0, win:0 }); o.n++; o.cnt++; o.win += r.win ? 1 : 0; }
     }
-    const pl = pb.map(b => ({ ...b, rate:b.n ? b.win/b.n : 0 })), pr = Object.values(pairs).map(o => ({ ...o, rate:o.win/o.n }));
-    return `<div class="card">${kpis(rows)}</div>
-      <div class="card"><h2>전투력 차이별 승률 <span class="tag">내 전투력 기준</span></h2>${table('pw', [{ key:'name', label:'상대 대비' }, { key:'n', label:'표본', fmt:r => num(r.n) }, { key:'rate', label:'승률', fmt:winBar }], pl, 'name')}</div>
-      <div class="card"><h2>파이터 상성 <span class="tag">내 파이터 vs 상대</span></h2>${table('pair', [{ key:'name', label:'매치업' }, { key:'n', label:'표본', fmt:r => num(r.n) }, { key:'rate', label:'승률', fmt:winBar }], pr, 'n')}</div>
-      <div class="note">아레나의 파이터·스킬별 승률은 '스킬', '파이터' 탭에서 모드를 아레나로 바꿔 보세요.</div>`;
+    const pl = pb.map(b => fin(b, 1)), pr = Object.values(pairs).map(o => fin(o, 1));
+    const c1 = [{ key:'name', label:'내 전투력' }, { key:'cnt', label:'표본', fmt:r => num(r.cnt) }, { key:'rate', label:'승률', fmt:forest }];
+    return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>전투력 차이별 승률</h2><p class="d">내 전투력이 상대보다 얼마나 높았는지에 따른 승률이에요. 차이가 커도 승률이 안 오르면 전투력 공식이 실제 강함과 어긋나 있다는 뜻이에요.</p>${table('pw', c1, pl, 'name')}</div>
+      <div class="sec"><h2>파이터 상성</h2><p class="d">내 파이터와 상대 파이터의 조합별 승률이에요. 표본이 많은 순으로 30개까지 보여요.</p>${table('pair', c1.map(c => c.key === 'name' ? { ...c, label:'매치업' } : c), pr, 'cnt', 30)}<div class="note">아레나의 파이터·스킬별 승률은 위에서 아레나를 고르고 스킬·파이터 탭에서 볼 수 있어요.</div></div></div>`;
   },
   log(rows) {
     const list = rows.slice().sort((a, b) => (b.srv || b.at) - (a.srv || a.at)).slice(0, 100);
-    const dk = d => d ? `${FN[d.f.id] ? FN[d.f.id][1] : '?'} <span style="color:var(--ink3)">Lv${d.f.lv}</span> ` + d.s.filter(Boolean).map(k => `${SN[k.id] ? SN[k.id][1] : '?'}${k.evo ? '<sup>' + (k.evo === 'a' ? '1' : '2') + '</sup>' : ''}`).join(' ') : '';
-    const body = list.map(r => { const t = new Date(r.srv || r.at); return `<tr><td>${t.toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' })}</td><td>${r.t === 'a' ? '아레나' : 'STAGE ' + r.stage}</td><td class="${r.win ? 'win' : 'lose'}">${r.win ? '승리' : '패배'}</td><td>${r.dur || 0}초</td><td class="deck">${dk(r.me)}</td><td class="deck">${r.opp ? dk(r.opp) : '-'}</td><td>${r.ver}</td></tr>`; }).join('');
-    return `<div class="card"><h2>최근 전투 100건</h2>${list.length ? `<div class="tw"><table><thead><tr><th style="cursor:default">시각</th><th style="cursor:default">종류</th><th style="cursor:default">결과</th><th style="cursor:default">시간</th><th style="cursor:default">내 덱</th><th style="cursor:default">상대 덱</th><th style="cursor:default">버전</th></tr></thead><tbody>${body}</tbody></table></div>` : '<div class="empty">기록이 없어요</div>'}</div>`;
+    const dk = d => d ? `<span class="deck">${FN[d.f.id] ? FN[d.f.id][1] : '?'}<small>Lv${d.f.lv}</small>${d.s.filter(Boolean).map(k => `${SN[k.id] ? SN[k.id][1] : '?'}${k.evo ? `<small>${k.evo === 'a' ? '1' : '2'}</small>` : ''}`).join(' ')}</span>` : '-';
+    const detail = (r, side) => { const att = side ? r.att : r.oatt, d = side ? r.me : r.opp; if (!att) return ''; return `<div style="font-weight:700;margin:4px 0">${side ? '내 쪽' : '상대 쪽'}</div><div class="g">${Object.entries(att).sort((a, b) => b[1][0] - a[1][0]).map(([k, v]) => `<span>${snm(k)} <b>${num(v[0])}</b>${v[1] || v[2] ? ` <span style="color:var(--ink3)">회복·보호 ${num(v[1] + v[2])}</span>` : ''}</span>`).join('')}</div>`; };
+    const body = list.map((r, i) => { const t = new Date(r.srv || r.at); return `<tr class="clk" data-o="${i}"><td>${t.toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' })}</td><td>${r.t === 'a' ? '아레나' : 'STAGE ' + r.stage}</td><td class="${r.win ? 'up' : 'down'}">${r.win ? '승리' : '패배'}</td><td>${r.dur || 0}초</td><td style="text-align:left">${dk(r.me)}</td><td style="text-align:left">${r.opp ? dk(r.opp) : ''}</td><td style="color:var(--ink3)">${r.ver}</td></tr>${open === i ? `<tr class="dtl"><td colspan="7">${detail(r, true)}${r.opp ? detail(r, false) : ''}${r.pw ? `<div class="note" style="margin-top:8px">전투력 ${num(r.pw[0])} vs ${num(r.pw[1])}</div>` : ''}</td></tr>` : ''}`; }).join('');
+    return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>최근 전투 100건</h2><p class="d">줄을 누르면 스킬별 피해와 회복을 볼 수 있어요.</p>${list.length ? `<div class="tw"><table><thead><tr>${['시각', '종류', '결과', '시간', '내 덱', '상대 덱', '버전'].map(h => `<th style="cursor:default;${h === '내 덱' || h === '상대 덱' ? 'text-align:left' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>` : ''}</div></div>`;
   }
 };
+function emptyHtml() { return `<div class="sheet"><div class="empty"><b>아직 보여 줄 기록이 없어요</b><p>게임 3-31 이상에서 전투를 몇 번 하면 1분 안에 기록이 올라와요. 버전이나 종류 필터가 좁게 걸려 있지 않은지도 확인해 보세요.</p></div></div>`; }
 function render() {
-  $('tabs').innerHTML = TABS.map(t => `<button class="tab ${tab === t[0] ? 'on' : ''}" data-t="${t[0]}">${t[1]}</button>`).join('');
-  $('view').innerHTML = TV[tab](view());
+  $('tabs').innerHTML = TABS.map(t => `<button class="tab" role="tab" type="button" data-t="${t[0]}" aria-selected="${tab === t[0]}">${t[1]}</button>`).join('');
+  const rows = view();
+  if (!rows.length) { $('view').innerHTML = emptyHtml(); return; }
+  const f = document.activeElement && document.activeElement.id === 'q' ? document.activeElement.selectionStart : null;
+  $('view').innerHTML = TV[tab](rows);
+  if (f !== null && $('q')) { $('q').focus(); $('q').setSelectionRange(f, f); }
 }
-function fillVersions() {
-  const vs = [...new Set(ALL.map(r => r.ver))].sort().reverse(), cur = $('fVer').value;
-  $('fVer').innerHTML = '<option value="all">모든 버전</option>' + vs.map(v => `<option>${v}</option>`).join('');
-  $('fVer').value = vs.includes(cur) ? cur : (vs[0] || 'all');
-}
+function skeleton() { $('view').innerHTML = `<div class="sheet"><div class="sec">${'<div class="sk" style="margin-bottom:14px"><i></i><i></i><i></i></div>'.repeat(6)}</div></div>`; }
+function fillVersions() { const vs = [...new Set(ALL.map(r => r.ver))].sort().reverse(), cur = $('fVer').value; $('fVer').innerHTML = '<option value="all">모든 버전</option>' + vs.map(v => `<option>${v}</option>`).join(''); $('fVer').value = vs.includes(cur) ? cur : (vs[0] || 'all'); }
 async function load(force) {
-  $('meta').textContent = '불러오는 중…'; 
+  $('meta').textContent = '불러오는 중'; skeleton();
   try {
-    const limit = +$('fLimit').value; ALL = await fetchRecords(limit, force);
-    fillVersions();
-    $('meta').textContent = `최근 기록 ${num(ALL.length)}건 · ${new Date(loadedAt || Date.now()).toLocaleString('ko-KR')} 기준${qs.get('demo') ? ' · 데모 데이터' : ''}`;
-    $('readNote').textContent = fromCache ? '캐시된 결과예요(15분). 읽기 한도를 쓰지 않았어요. 새로고침을 누르면 다시 읽어요.' : (qs.get('demo') ? '' : `Firestore에서 ${num(reads)}건을 읽었어요 (하루 무료 한도 50,000건).`);
+    ALL = await fetchRecords(+$('fLimit').value, force); fillVersions();
+    const t = new Date(loadedAt || Date.now());
+    $('meta').textContent = `최근 기록 ${num(ALL.length)}건 · ${t.toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' })} 기준${qs.get('demo') ? ' · 데모 데이터' : ''}`;
+    $('readNote').textContent = qs.get('demo') ? '' : (fromCache ? '캐시된 결과를 보고 있어요(15분). 읽기 한도를 쓰지 않았어요.' : `Firestore에서 ${num(reads)}건을 읽었어요. 하루 무료 한도는 50,000건이에요.`);
     render();
-  } catch (e) { $('meta').textContent = '불러오지 못했어요'; $('view').innerHTML = `<div class="card"><div class="empty">${String(e.code || e.message || e)}<br><span style="font-weight:500;font-size:12px">firestore.rules에서 battles 읽기를 열었는지 확인해 주세요.</span></div></div>`; }
+  } catch (e) {
+    $('meta').textContent = '불러오지 못했어요';
+    $('view').innerHTML = `<div class="sheet"><div class="empty"><b>기록을 읽지 못했어요</b><p>${String(e.code || e.message || e)}<br>firestore.rules에서 battles 읽기가 열려 있는지, Authentication의 승인된 도메인에 이 사이트 주소가 있는지 확인해 주세요.</p></div></div>`;
+  }
 }
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-t]'); if (t) { tab = t.dataset.t; render(); return; }
-  const h = e.target.closest('th[data-s]'); if (h) { const [n, k] = h.dataset.s.split(':'), c = sortKey[n]; sortKey[n] = { key:k, dir:c && c.key === k ? -c.dir : (k === 'name' ? 1 : -1) }; render(); }
+  const t = e.target.closest('[data-t]'); if (t) { tab = t.dataset.t; open = -1; render(); return; }
+  const h = e.target.closest('th[data-s]'); if (h) { const [n, k] = h.dataset.s.split(':'), c = sortKey[n]; sortKey[n] = { key:k, dir:c && c.key === k ? -c.dir : (k === 'name' ? 1 : -1) }; render(); return; }
+  const m = e.target.closest('#fMode button'); if (m) { mode = m.dataset.v; document.querySelectorAll('#fMode button').forEach(b => b.setAttribute('aria-pressed', b === m)); open = -1; render(); return; }
+  const c = e.target.closest('[data-tier]'); if (c) { tierF = c.dataset.tier; render(); return; }
+  const r = e.target.closest('tr[data-o]'); if (r) { const i = +r.dataset.o; open = open === i ? -1 : i; render(); return; }
+  const d = e.target.closest('.dot'); if (d) showDot(d.dataset.i);
 });
-for (const id of ['fVer', 'fMode', 'fMin', 'fDbg']) $(id).addEventListener('input', render);
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('dot')) { e.preventDefault(); showDot(e.target.dataset.i); } });
+function showDot(id) {
+  const rows = view(), l = tab === 'skill' ? aggSkills(rows).list : aggFighters(rows), o = l.find(x => x.id === id), cap = $('cap'); if (!o || !cap) return;
+  cap.innerHTML = `<b>${o.name}</b> · 승률 <b class="${rateCls(o.rate)}">${pct(o.rate)}</b> (${pct(o.ci[0], 0)}~${pct(o.ci[1], 0)}) · 채택률 <b>${pct(o.pick)}</b> · 표본 <b>${num(o.cnt)}</b>건 · 평균 Lv <b>${o.avgLv.toFixed(1)}</b>`;
+}
+document.addEventListener('input', e => { if (e.target.id === 'q') { q = e.target.value.trim(); render(); } });
+for (const id of ['fVer', 'fMin', 'fDbg']) $(id).addEventListener('input', () => { open = -1; render(); });
 $('fLimit').addEventListener('change', () => load(true)); $('reload').addEventListener('click', () => load(true));
 load(false);
 </script>
