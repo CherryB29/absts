@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>애니멀 브롤 통계</title>
+<title>애니멀 브롤 아레나 통계</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
 :root{
@@ -96,15 +96,13 @@ tr.clk:hover td{background:var(--soft)}
 <body>
 <div class="wrap">
   <header class="top">
-    <div><h1>애니멀 브롤 통계</h1><p id="meta">불러오는 중</p></div>
+    <div><h1>애니멀 브롤 아레나 통계</h1><p id="meta">불러오는 중</p></div>
     <button class="ghost" id="reload" type="button">새로고침</button>
   </header>
   <div class="bar">
-    <div class="seg" id="fMode" role="group" aria-label="전투 종류"><button type="button" data-v="all" aria-pressed="true">전체</button><button type="button" data-v="s" aria-pressed="false">스테이지</button><button type="button" data-v="a" aria-pressed="false">아레나</button></div>
     <label class="fld">버전 <select id="fVer"></select></label>
     <label class="fld">최소 표본 <input class="num" id="fMin" type="number" min="1" value="10"></label>
     <details class="more"><summary class="ghost">설정</summary><div class="pop">
-      <label class="fld"><input id="fDbg" type="checkbox" checked> 디버그 기록 제외</label>
       <label class="fld">읽어올 기록 <select id="fLimit"><option>500</option><option selected>1000</option><option>2000</option></select></label>
       <div class="note" id="readNote" style="margin:0"></div>
     </div></details>
@@ -148,7 +146,7 @@ function demoData() {
   for (let i = 0; i < 900; i++) {
     const a = Math.random() < 0.4, me = deck(), att = {}; me.s.forEach(s => { att[s.id] = [Math.round(Math.random()*5000), Math.round(Math.random()*500), 0]; }); att.basic = [Math.round(Math.random()*8000), 0, 0];
     const p = 0.5 + fb[me.f.id] + me.s.reduce((x, s) => x + bias[s.id], 0)/3;
-    const r = { t:a?'a':'s', stage:a?0:1 + Math.floor(Math.random()*30), win:Math.random() < p, dur:20 + Math.floor(Math.random()*90), w:a?1:R([1,1,10]), ver:R(['3-31','3-31','3-30']), me, att, dbg:Math.random() < 0.05, at:Date.now() - i*600000, srv:Date.now() - i*600000 };
+    const r = { t:a?'a':'s', stage:a?0:1 + Math.floor(Math.random()*30), win:Math.random() < p, dur:20 + Math.floor(Math.random()*90), w:a?1:R([1,1,10]), ver:R(['3-32','3-32','3-31']), me, att, dbg:Math.random() < 0.05, at:Date.now() - i*600000, srv:Date.now() - i*600000 };
     if (a) { r.opp = deck(); r.oatt = { basic:[3000,0,0] }; r.pw = [400 + Math.round(Math.random()*600), 400 + Math.round(Math.random()*600)]; }
     out.push(r);
   }
@@ -156,7 +154,7 @@ function demoData() {
 }
 
 /* ───── 집계 ───── */
-const view = () => { const ver = $('fVer').value, dbg = $('fDbg').checked; return ALL.filter(r => (!dbg || !r.dbg) && (ver === 'all' || r.ver === ver) && (mode === 'all' || r.t === mode)); };
+const view = () => { const ver = $('fVer').value; return ALL.filter(r => r.t === 'a' && !r.dbg && (ver === 'all' || r.ver === ver)); };
 function samples(rows) {
   const out = [];
   for (const r of rows) {
@@ -205,7 +203,7 @@ const nameCell = r => `<span class="tier" style="background:${tcol(r.tier)}"></s
 function glance(items) { return `<div class="sheet" style="margin-top:16px"><div class="glance">${items.map(i => `<div><small>${i[0]}</small><b>${i[1]}</b><span class="${i[3] || ''}">${i[2]}</span></div>`).join('')}</div></div>`; }
 function kpis(rows) {
   const w = rows.reduce((a, r) => a + (r.w || 1), 0), wins = rows.reduce((a, r) => a + (r.w || 1)*(r.win ? 1 : 0), 0), dur = rows.reduce((a, r) => a + (r.w || 1)*(r.dur || 0), 0);
-  return [['기록 수', num(rows.length) + '건', mode === 'all' ? '스테이지와 아레나 합계' : (mode === 's' ? '스테이지' : '아레나')], ['승률', w ? pct(wins/w) : '-', '가중 평균'], ['평균 전투 시간', w ? Math.round(dur/w) + '초' : '-', '가중 평균']];
+  return [['기록 수', num(rows.length) + '건', '아레나 친선전'], ['승률', w ? pct(wins/w) : '-', '가중 평균'], ['평균 전투 시간', w ? Math.round(dur/w) + '초' : '-', '가중 평균']];
 }
 function picks(list, min) {
   const ok = list.filter(o => o.cnt >= min); if (!ok.length) return null;
@@ -235,7 +233,7 @@ function mapChart(list, min) {
 }
 
 /* ───── 탭 ───── */
-const TABS = [['skill', '스킬'], ['fighter', '파이터'], ['stage', '스테이지'], ['arena', '아레나'], ['log', '전투 기록']];
+const TABS = [['skill', '스킬'], ['fighter', '파이터'], ['arena', '상성·전투력'], ['log', '전투 기록']];
 function toolsHtml(withTier) {
   return `<div class="tools">${withTier ? ['all', 'n', 'r', 'e', 'm', 'l', 't'].map(t => `<button type="button" class="chip" data-tier="${t}" aria-pressed="${tierF === t}">${t === 'all' ? '모든 등급' : TIER[t]}</button>`).join('') : ''}<input class="search" id="q" type="search" placeholder="이름 검색" value="${q}" aria-label="이름 검색"></div>`;
 }
@@ -258,16 +256,6 @@ const TV = {
       ${p ? `<div class="sec" style="padding:0"><div class="glance" style="margin:0">${p.map(([l, o]) => `<div><small>${l}</small><b>${FN[o.id] ? FN[o.id][1] + ' ' + FN[o.id][2] : o.id}</b><span class="${rateCls(o.rate)}">승률 ${pct(o.rate)}</span> <span style="color:var(--ink3)">· 채택 ${pct(o.pick)}</span></div>`).join('')}</div></div>` : ''}
       <div class="sec"><h2>파이터별 승률</h2>${toolsHtml(true)}${table('fighter', cols, list, 'cnt')}</div></div>`;
   },
-  stage(rows) {
-    rows = rows.filter(r => r.t === 's'); const m = {};
-    for (const r of rows) { const o = m[r.stage] || (m[r.stage] = { stage:r.stage, name:'STAGE ' + r.stage, n:0, cnt:0, win:0, dur:0, f:{} }); const w = r.w || 1; o.n += w; o.cnt++; o.win += w*(r.win ? 1 : 0); o.dur += w*(r.dur || 0); if (r.me && r.me.f) o.f[r.me.f.id] = (o.f[r.me.f.id] || 0) + w; }
-    const list = Object.values(m).map(o => { fin(o, 1); o.avgDur = o.dur/o.n; o.top = fnm(Object.entries(o.f).sort((a, b) => b[1] - a[1])[0][0]); return o; }).sort((a, b) => a.stage - b.stage);
-    const min = +$('fMin').value || 1;
-    let chart = '<div class="note">스테이지 기록이 쌓이면 클리어율 그래프가 그려져요.</div>';
-    if (list.length) { const W = 720, H = 180, bw = Math.max(4, Math.min(22, (W - 40)/list.length - 3)); chart = `<div class="mapw"><svg class="map" viewBox="0 0 ${W} ${H + 24}" role="img" aria-label="스테이지별 클리어율"><line x1="30" x2="${W}" y1="${H/2}" y2="${H/2}" stroke="var(--mid)" stroke-dasharray="4 4"/><text x="0" y="${H/2 + 4}" font-size="11" fill="var(--ink3)">50%</text>${list.map((o, i) => { const x = 36 + i*(bw + 3), h = Math.max(2, o.rate*H); return `<rect x="${x}" y="${H - h}" width="${bw}" height="${h}" rx="3" fill="${o.rate >= 0.5 ? 'var(--good)' : 'var(--bad)'}" opacity="${o.cnt < min ? .3 : .85}"><title>STAGE ${o.stage} · ${pct(o.rate)} · ${o.cnt}건</title></rect>${list.length < 26 || i % 5 === 0 ? `<text x="${x + bw/2}" y="${H + 16}" text-anchor="middle" font-size="10.5" fill="var(--ink3)">${o.stage}</text>` : ''}`; }).join('')}</svg></div>`; }
-    const cols = [{ key:'stage', label:'스테이지', fmt:r => r.name }, { key:'cnt', label:'표본', fmt:r => num(r.cnt) }, { key:'rate', label:'클리어율', fmt:forest }, { key:'avgDur', label:'평균 시간', fmt:r => Math.round(r.avgDur) + '초' }, { key:'top', label:'많이 쓴 파이터' }];
-    return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>스테이지별 클리어율</h2><p class="d">50% 아래로 내려가는 구간이 막히는 지점이에요. 반복 전투는 10%만 기록하고 가중치를 곱해 계산해요.</p>${chart}</div><div class="sec"><h2>스테이지 표</h2>${table('stage', cols, list, 'stage')}</div></div>`;
-  },
   arena(rows) {
     rows = rows.filter(r => r.t === 'a'); const B = [['상대보다 30% 이상 약함', -9, -0.3], ['30~10% 약함', -0.3, -0.1], ['비슷함(±10%)', -0.1, 0.1], ['10~30% 강함', 0.1, 0.3], ['30% 이상 강함', 0.3, 9]], pb = B.map(b => ({ name:b[0], lo:b[1], hi:b[2], n:0, cnt:0, win:0 })), pairs = {};
     for (const r of rows) {
@@ -277,7 +265,7 @@ const TV = {
     const pl = pb.map(b => fin(b, 1)), pr = Object.values(pairs).map(o => fin(o, 1));
     const c1 = [{ key:'name', label:'내 전투력' }, { key:'cnt', label:'표본', fmt:r => num(r.cnt) }, { key:'rate', label:'승률', fmt:forest }];
     return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>전투력 차이별 승률</h2><p class="d">내 전투력이 상대보다 얼마나 높았는지에 따른 승률이에요. 차이가 커도 승률이 안 오르면 전투력 공식이 실제 강함과 어긋나 있다는 뜻이에요.</p>${table('pw', c1, pl, 'name')}</div>
-      <div class="sec"><h2>파이터 상성</h2><p class="d">내 파이터와 상대 파이터의 조합별 승률이에요. 표본이 많은 순으로 30개까지 보여요.</p>${table('pair', c1.map(c => c.key === 'name' ? { ...c, label:'매치업' } : c), pr, 'cnt', 30)}<div class="note">아레나의 파이터·스킬별 승률은 위에서 아레나를 고르고 스킬·파이터 탭에서 볼 수 있어요.</div></div></div>`;
+      <div class="sec"><h2>파이터 상성</h2><p class="d">내 파이터와 상대 파이터의 조합별 승률이에요. 표본이 많은 순으로 30개까지 보여요.</p>${table('pair', c1.map(c => c.key === 'name' ? { ...c, label:'매치업' } : c), pr, 'cnt', 30)}<div class="note">스킬·파이터별 승률은 각 탭에서 볼 수 있어요. 아레나는 양쪽 덱을 모두 표본으로 세요.</div></div></div>`;
   },
   log(rows) {
     const list = rows.slice().sort((a, b) => (b.srv || b.at) - (a.srv || a.at)).slice(0, 100);
@@ -287,7 +275,7 @@ const TV = {
     return glance(kpis(rows)) + `<div class="sheet"><div class="sec"><h2>최근 전투 100건</h2><p class="d">줄을 누르면 스킬별 피해와 회복을 볼 수 있어요.</p>${list.length ? `<div class="tw"><table><thead><tr>${['시각', '종류', '결과', '시간', '내 덱', '상대 덱', '버전'].map(h => `<th style="cursor:default;${h === '내 덱' || h === '상대 덱' ? 'text-align:left' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>` : ''}</div></div>`;
   }
 };
-function emptyHtml() { return `<div class="sheet"><div class="empty"><b>아직 보여 줄 기록이 없어요</b><p>게임 3-31 이상에서 전투를 몇 번 하면 1분 안에 기록이 올라와요. 버전이나 종류 필터가 좁게 걸려 있지 않은지도 확인해 보세요.</p></div></div>`; }
+function emptyHtml() { return `<div class="sheet"><div class="empty"><b>아직 보여 줄 기록이 없어요</b><p>게임 3-32 이상에서 아레나 전투를 몇 번 하면 1분 안에 기록이 올라와요. 버전 필터가 좁게 걸려 있지 않은지도 확인해 보세요.</p></div></div>`; }
 function render() {
   $('tabs').innerHTML = TABS.map(t => `<button class="tab" role="tab" type="button" data-t="${t[0]}" aria-selected="${tab === t[0]}">${t[1]}</button>`).join('');
   const rows = view();
@@ -314,7 +302,6 @@ async function load(force) {
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-t]'); if (t) { tab = t.dataset.t; open = -1; render(); return; }
   const h = e.target.closest('th[data-s]'); if (h) { const [n, k] = h.dataset.s.split(':'), c = sortKey[n]; sortKey[n] = { key:k, dir:c && c.key === k ? -c.dir : (k === 'name' ? 1 : -1) }; render(); return; }
-  const m = e.target.closest('#fMode button'); if (m) { mode = m.dataset.v; document.querySelectorAll('#fMode button').forEach(b => b.setAttribute('aria-pressed', b === m)); open = -1; render(); return; }
   const c = e.target.closest('[data-tier]'); if (c) { tierF = c.dataset.tier; render(); return; }
   const r = e.target.closest('tr[data-o]'); if (r) { const i = +r.dataset.o; open = open === i ? -1 : i; render(); return; }
   const d = e.target.closest('.dot'); if (d) showDot(d.dataset.i);
@@ -325,7 +312,7 @@ function showDot(id) {
   cap.innerHTML = `<b>${o.name}</b> · 승률 <b class="${rateCls(o.rate)}">${pct(o.rate)}</b> (${pct(o.ci[0], 0)}~${pct(o.ci[1], 0)}) · 채택률 <b>${pct(o.pick)}</b> · 표본 <b>${num(o.cnt)}</b>건 · 평균 Lv <b>${o.avgLv.toFixed(1)}</b>`;
 }
 document.addEventListener('input', e => { if (e.target.id === 'q') { q = e.target.value.trim(); render(); } });
-for (const id of ['fVer', 'fMin', 'fDbg']) $(id).addEventListener('input', () => { open = -1; render(); });
+for (const id of ['fVer', 'fMin']) $(id).addEventListener('input', () => { open = -1; render(); });
 $('fLimit').addEventListener('change', () => load(true)); $('reload').addEventListener('click', () => load(true));
 load(false);
 </script>
